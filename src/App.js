@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import './App.css'
 import AddNewPlace from './components/AddNewPlace/AddNewPlace';
 import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
 import PopularPlaces from './components/PopularPlaces/PopularPlaces';
+import SideBar from './components/SideBar/SideBar';
 function App() {
+  const [visableOrNot, setVisableOrNot] = useState({ right: '-9999px' });
   return (
     <div className="App">
       <Header />
@@ -18,7 +21,7 @@ function App() {
         </div>
 
         <section className='container addNewPlace'>
-          <AddNewPlace />
+          <AddNewPlace setVisableOrNot={setVisableOrNot} />
         </section>
         {/* add a new place */}
 
@@ -26,6 +29,7 @@ function App() {
           <PopularPlaces />
         </section>
 
+        <SideBar visableOrNot={visableOrNot} setVisableOrNot={setVisableOrNot} />
 
       </main>
       {/* End Main Part of web page */}

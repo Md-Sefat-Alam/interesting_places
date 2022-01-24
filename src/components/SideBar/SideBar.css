@@ -1,0 +1,18 @@
+.sideBar{
+    height: 100vh;
+    /* right: -990px; */
+    right: 0;
+    top: 0;
+    /* background-color: rgba(2, 31, 158, 0.877); */
+    background-color: rgba(255, 255, 255, 0.919);
+    z-index: 9;
+}
+aside input{
+    color: gray;
+}
+aside .formContentWrapper{
+    height: 75vh;
+    overflow-y: scroll;
+    border-top: 2px solid rgb(231, 224, 224);
+    margin-top: 5px;
+}
