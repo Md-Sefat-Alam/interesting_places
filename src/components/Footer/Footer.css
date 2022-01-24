@@ -1,0 +1,33 @@
+footer{
+    min-height: 300px;
+    background-image: url('../../img/footer-images.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
+.footerList{
+}
+.footerList ul{
+
+}
+.footerList ul li{
+    cursor: pointer;
+    width: 280px;
+    transition: all 0.2s;
+}
+.footerList ul li:hover{
+    color: black;
+    font-weight: bold;
+}
+
+.topStyleImg{
+    min-height: 200px;
+    background-image: url('../../img/footer-images.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    transform: rotate(180deg);
+    z-index: -111;
+    position: fixed;
+    width: 100%;
+}

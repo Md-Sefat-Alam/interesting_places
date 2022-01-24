@@ -1,32 +1,35 @@
 import './App.css'
+import AddNewPlace from './components/AddNewPlace/AddNewPlace';
+import Footer from './components/Footer/Footer';
+import Header from './components/Header/Header';
 function App() {
   return (
     <div className="App">
-
-
-      <header className="flex justify-between bg-gray-600 py-2 fixed w-full">
-        <div className="font-bold text-3xl cursor-pointer select-none w-1/2">
-          <h3 className="text-yellow-600 mx-4">Interesting <span className="font-bold text-gray-900">Places</span></h3>
-        </div>
-        <nav className='w-1/2'>
-          <ul className='flex text-gray-500'>
-            <li className='cursor-pointer select-none mx-2 font-bold text-xl text-gray-400 hover:text-gray-300'>Home</li>
-            <li className='cursor-pointer select-none mx-2 text-xl hover:text-gray-300'>Favorite Place</li>
-            <li className='cursor-pointer select-none mx-2 text-xl hover:text-gray-300'>About Us</li>
-            <li className='cursor-pointer select-none mx-2 text-xl hover:text-gray-300'>Blogs</li>
-          </ul>
-        </nav>
-      </header>
+      <Header />
       {/* end header */}
 
       <main>
+        <div className='topStyleImg'>
+          {/* this use only for top style */}
+        </div>
+        <div style={{ height: '200px' }}>
+          {/* this only use for a long gap */}
+        </div>
+
+        <section className='container addNewPlace'>
+          <AddNewPlace />
+        </section>
+        {/* add a new place */}
+
+        <section className='container popularPlaces'>
+
+        </section>
+
 
       </main>
       {/* End Main Part of web page */}
 
-      <footer>
-
-      </footer>
+      <Footer />
       {/* End footer */}
 
     </div>
