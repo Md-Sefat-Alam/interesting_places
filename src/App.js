@@ -2,6 +2,7 @@ import './App.css'
 import AddNewPlace from './components/AddNewPlace/AddNewPlace';
 import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
+import PopularPlaces from './components/PopularPlaces/PopularPlaces';
 function App() {
   return (
     <div className="App">
@@ -22,7 +23,7 @@ function App() {
         {/* add a new place */}
 
         <section className='container popularPlaces'>
-
+          <PopularPlaces />
         </section>
 
 

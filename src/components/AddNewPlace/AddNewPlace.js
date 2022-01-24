@@ -3,7 +3,7 @@ import "./AddNewPlace.css"
 
 const AddNewPlace = () => {
     return (
-        <div className='flex justify-between border-none p-12 bg-zinc-200/50 rounded-md'>
+        <div className='flex justify-between border-none p-12 bg-zinc-200/80 rounded-md mx-4'>
             <div>
                 <h1 className='font-bold text-4xl text-slate-700'>Want to add a new Place?</h1>
             </div>
