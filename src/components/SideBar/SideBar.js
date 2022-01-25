@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './SideBar.css'
 
 const SideBar = ({ visableOrNot, setVisableOrNot }) => {
+    const [divisonText, setDivisonText] = useState('');
+    const [showSearchBox, setShowSearchBox] = useState({ visibility: 'hidden' })
+
     const handleSubmit = () => {
         // Event.preventDefault();
 
@@ -9,6 +12,20 @@ const SideBar = ({ visableOrNot, setVisableOrNot }) => {
     const handleBackBtn = () => {
         setVisableOrNot({ right: '-9999px', transition: 'all 0.5s' })
     }
+
+    // handle search input field
+    const handleDivison = (e) => {
+        setDivisonText(e.target.value);
+    }
+    const showSearchResult = () => {
+        setShowSearchBox({ visibility: 'visible' })
+    }
+    const hiddenSearchResult = () => {
+        setShowSearchBox({ visibility: 'hidden' })
+    }
+
+
+
     return (
         <aside style={visableOrNot} className='sideBar w-1/3 fixed border-l-2'>
             <div className='h-16'>
@@ -20,19 +37,33 @@ const SideBar = ({ visableOrNot, setVisableOrNot }) => {
             <div>
                 <form onSubmit={handleSubmit}>
                     <div className='formContentWrapper pb-5'>
-                        <div className='mx-5 mt-5'>
+
+
+                        <div className='mx-5 mt-5 relative'>
                             <label className='block' htmlFor="searchAbleDropdown">Divison</label>
-                            <input className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500' id='searchAbleDropdown' name='searchAbleDropdown' type="text" placeholder='Type here' />
-                            <span className='-ml-8'><i class="fas fa-search text-xl text-gray-400"></i></span>
+                            <div >
+                                <input onChange={handleDivison} onFocus={showSearchResult} onBlur={hiddenSearchResult} className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500' id='searchAbleDropdown' name='searchAbleDropdown' type="text" placeholder='Type here' />
+                                <span className='-ml-8'><i class="fas fa-search text-xl text-gray-400"></i></span>
+                                <div style={showSearchBox} className='absolute w-full bg-white shadow-xl px-2 pb-4 border-b-2 rounded-b-lg'>
+                                    <option className='hover:bg-gray-100 cursor-pointer p-1' value="hello">hello</option>
+                                    <option className='hover:bg-gray-100 cursor-pointer p-1' value="hello">hello</option>
+                                    <option className='hover:bg-gray-100 cursor-pointer p-1' value="hello">hello</option>
+                                    <option className='hover:bg-gray-100 cursor-pointer p-1' value="hello">hello</option>
+                                    <option className='hover:bg-gray-100 cursor-pointer p-1' value="hello">hello</option>
+                                </div>
+                            </div>
+
                         </div>
+
+
                         <div className='mx-5 mt-5'>
                             <label className='block' htmlFor="dropDown">District</label>
                             <input className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500' id='dropDown' name='dropDown' type="text" placeholder='Type here' />
                             <span className='-ml-8'><i class="fas fa-chevron-circle-down text-xl text-gray-400"></i></span>
                         </div>
 
-                        <div className='mx-5 mt-5'>
 
+                        <div className='mx-5 mt-5'>
                             <div>
                                 <label className='block' htmlFor="popularPlace">Popular Place</label>
                                 <input className='w-3/4 rounded-md py-2 px-3 border-2 focus:outline-blue-500' id='popularPlace' name='popularPlace' type="text" placeholder='Type here' defaultValue={'Popular Place 1'} />
@@ -67,20 +98,69 @@ const SideBar = ({ visableOrNot, setVisableOrNot }) => {
                         </div>
                         {/* end add popular place */}
 
-                        <div className='mx-5 mt-5'>
-                            <label className='block' htmlFor="dropDown">Packages</label>
-                            <input className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500' id='dropDown' name='dropDown' type="text" placeholder='Type here' />
-                            <span className='-ml-8'><i class="fas fa-chevron-circle-down text-xl text-gray-400"></i></span>
-                        </div>
-                        <div className='mx-5 mt-5'>
-                            <label className='block' htmlFor="dropDown">Packages</label>
-                            <input className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500' id='dropDown' name='dropDown' type="text" placeholder='Type here' />
-                            <span className='-ml-8'><i class="fas fa-chevron-circle-down text-xl text-gray-400"></i></span>
-                        </div>
-                        <div className='mx-5 mt-5'>
-                            <label className='block' htmlFor="dropDown">Packages</label>
-                            <input className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500' id='dropDown' name='dropDown' type="text" placeholder='Type here' />
-                            <span className='-ml-8'><i class="fas fa-chevron-circle-down text-xl text-gray-400"></i></span>
+                        <div>
+                            <p className='mx-5 mt-10'>Packages</p>
+
+
+                            <div className='mx-5 mt-2'>
+                                <div className='flex justify-items-start'>
+                                    <label className='flex w-full cursor-pointer' htmlFor="package1">
+                                        <div style={{ height: '50px', width: '50px' }} className='bg-blue-200 rounded-md'></div>
+                                        <div className='ml-5'>
+                                            <p className='text-blue-500 font-bold'>Package 1</p>
+                                            <p className='text-gray-800'>300 TK</p>
+                                        </div>
+                                    </label>
+                                    <div style={{ height: '50px' }} className='flex-grow flex justify-end'>
+                                        <input className='mt-5' type="checkbox" name="package1" id="package1" value='1' />
+                                    </div>
+                                </div>
+                                {/*end 01 */}
+
+                                <div className='flex justify-items-start mt-3'>
+                                    <label className='flex w-full cursor-pointer' htmlFor="package2">
+                                        <div style={{ height: '50px', width: '50px' }} className='bg-red-200 rounded-md'></div>
+                                        <div className='ml-5'>
+                                            <p className='text-red-300 font-bold'>Package 2</p>
+                                            <p className='text-gray-800'>300 TK</p>
+                                        </div>
+                                    </label>
+                                    <div style={{ height: '50px' }} className='flex-grow flex justify-end'>
+                                        <input className='mt-5' type="checkbox" name="package2" id="package2" />
+                                    </div>
+                                </div>
+                                {/* 02 */}
+
+                                <div className='flex justify-items-start mt-3'>
+                                    <label className='flex w-full cursor-pointer' htmlFor="package3">
+                                        <div style={{ height: '50px', width: '50px' }} className='bg-green-200 rounded-md'></div>
+                                        <div className='ml-5'>
+                                            <p className='text-green-400 font-bold'>Package 3</p>
+                                            <p className='text-gray-800'>300 TK</p>
+                                        </div>
+                                    </label>
+                                    <div style={{ height: '50px' }} className='flex-grow flex justify-end'>
+                                        <input className='mt-5' type="checkbox" name="package3" id="package3" />
+                                    </div>
+                                </div>
+                                {/* 03 */}
+
+                                <div className='flex justify-items-start mt-3'>
+                                    <label className='flex w-full cursor-pointer' htmlFor="package4">
+                                        <div style={{ height: '50px', width: '50px' }} className='bg-yellow-400 rounded-md'></div>
+                                        <div className='ml-5'>
+                                            <p className='text-yellow-600 font-bold'>Package 4</p>
+                                            <p className='text-gray-800'>300 TK</p>
+                                        </div>
+                                    </label>
+                                    <div style={{ height: '50px' }} className='flex-grow flex justify-end'>
+                                        <input className='mt-5' type="checkbox" name="package4" id="package4" />
+                                    </div>
+                                </div>
+                                {/* 04 */}
+                            </div>
+
+
                         </div>
 
                     </div>
