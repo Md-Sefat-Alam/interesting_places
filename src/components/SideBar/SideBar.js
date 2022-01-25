@@ -1,13 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './SideBar.css'
 
 const SideBar = ({ visableOrNot, setVisableOrNot }) => {
+    let i = 102012;
+    const [divisonData, setDivisonData] = useState([]);
+    const [districtData, setDistrictData] = useState([]);
+
     const [divisonText, setDivisonText] = useState('');
     const [showSearchBox, setShowSearchBox] = useState({ visibility: 'hidden' })
 
+    // fetch divison data from api
+    useEffect(() => {
+        fetch('https://engine.shikho.net/address?division_id=487095964')
+            .then(res => res.json())
+            .then(data => setDivisonData(data))
+    }, [])
+
+    // fetch district data from api
+    useEffect(() => {
+        fetch('https://engine.shikho.net/address?district_id=613581915')
+            .then(res => res.json())
+            .then(data => setDistrictData(data))
+    }, [])
+
     const handleSubmit = () => {
         // Event.preventDefault();
-
     }
     const handleBackBtn = () => {
         setVisableOrNot({ right: '-9999px', transition: 'all 0.5s' })
@@ -16,11 +33,11 @@ const SideBar = ({ visableOrNot, setVisableOrNot }) => {
     // handle search input field
     const handleDivison = (e) => {
         setDivisonText(e.target.value);
-    }
-    const showSearchResult = () => {
         setShowSearchBox({ visibility: 'visible' })
     }
-    const hiddenSearchResult = () => {
+
+    const divisonSelect = e => {
+        document.getElementById('searchAbleDropdown').value = e;
         setShowSearchBox({ visibility: 'hidden' })
     }
 
@@ -42,14 +59,14 @@ const SideBar = ({ visableOrNot, setVisableOrNot }) => {
                         <div className='mx-5 mt-5 relative'>
                             <label className='block' htmlFor="searchAbleDropdown">Divison</label>
                             <div >
-                                <input onChange={handleDivison} onFocus={showSearchResult} onBlur={hiddenSearchResult} className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500' id='searchAbleDropdown' name='searchAbleDropdown' type="text" placeholder='Type here' />
+                                <input onChange={handleDivison} className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500 focus:outline-b-white' id='searchAbleDropdown' name='searchAbleDropdown' type="text" placeholder='Type here' autoComplete='off' />
                                 <span className='-ml-8'><i class="fas fa-search text-xl text-gray-400"></i></span>
-                                <div style={showSearchBox} className='absolute w-full bg-white shadow-xl px-2 pb-4 border-b-2 rounded-b-lg'>
-                                    <option className='hover:bg-gray-100 cursor-pointer p-1' value="hello">hello</option>
-                                    <option className='hover:bg-gray-100 cursor-pointer p-1' value="hello">hello</option>
-                                    <option className='hover:bg-gray-100 cursor-pointer p-1' value="hello">hello</option>
-                                    <option className='hover:bg-gray-100 cursor-pointer p-1' value="hello">hello</option>
-                                    <option className='hover:bg-gray-100 cursor-pointer p-1' value="hello">hello</option>
+                                <div style={{ ...showSearchBox, maxHeight: '200px', overflowY: 'scroll' }} className='absolute w-full bg-blue-100 shadow-2xl px-2 pb-4 border-b-2 rounded-b-lg'>
+                                    {
+                                        (divisonData.body) && divisonData.body.map(singleDivisonData => [singleDivisonData.display].filter(divisonName => divisonName.toLowerCase().includes(divisonText.toLowerCase())).map(sortedDivisonName => (
+                                            <option key={i++} onClick={(e) => divisonSelect(e.target.innerText)} className='hover:bg-gray-100 cursor-pointer p-1' value={sortedDivisonName}>{sortedDivisonName}</option>
+                                        )))
+                                    }
                                 </div>
                             </div>
 
@@ -58,8 +75,17 @@ const SideBar = ({ visableOrNot, setVisableOrNot }) => {
 
                         <div className='mx-5 mt-5'>
                             <label className='block' htmlFor="dropDown">District</label>
-                            <input className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500' id='dropDown' name='dropDown' type="text" placeholder='Type here' />
+                            <input list="districtList" className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500' id='dropDown' name='dropDown' type="text" placeholder='Type here' />
                             <span className='-ml-8'><i class="fas fa-chevron-circle-down text-xl text-gray-400"></i></span>
+                            <datalist id='districtList'>
+                                {/* <option value="hello 1"></option> */}
+                                {
+                                    (districtData.body) && districtData.body.map(singleDistrictData => [singleDistrictData.display].map(districtName => (
+                                        <option value={districtName}></option>
+                                    )))
+                                }
+                            </datalist>
+
                         </div>
 
 
@@ -172,9 +198,9 @@ const SideBar = ({ visableOrNot, setVisableOrNot }) => {
                     </div>
                     {/* end form submit */}
                 </form>
-            </div>
+            </div >
 
-        </aside>
+        </aside >
     );
 };
 
