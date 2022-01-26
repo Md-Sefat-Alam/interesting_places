@@ -7,7 +7,9 @@ const SideBar = ({ visableOrNot, setVisableOrNot }) => {
     const [districtData, setDistrictData] = useState([]);
 
     const [divisonText, setDivisonText] = useState('');
-    const [showSearchBox, setShowSearchBox] = useState({ visibility: 'hidden' })
+    const [districtSelected, setDistrictSelected] = useState('');
+    const [showSearchBox, setShowSearchBox] = useState({ visibility: 'hidden' });
+    const [popularPlaceCount, setPopularPlaceCount] = useState([])
 
     // fetch divison data from api
     useEffect(() => {
@@ -38,10 +40,37 @@ const SideBar = ({ visableOrNot, setVisableOrNot }) => {
 
     const divisonSelect = e => {
         document.getElementById('searchAbleDropdown').value = e;
-        setShowSearchBox({ visibility: 'hidden' })
+        setDivisonText(e);
+        setShowSearchBox({ visibility: 'hidden' });
     }
 
+    // add popular place
+    const addPopularPlace = () => {
+        // const popularPlaceAddTemplete = <div className='mt-2'>
+        //     <input className='w-3/4 rounded-md py-2 px-3 border-2 focus:outline-blue-500 ' id='popularPlace' name='popularPlace' type="text" placeholder='Type here' defaultValue={'Popular Place 2'} />
+        //     <div className='inline-block w-1/4 cursor-pointer select-none'>
+        //         <div className='w-full flex justify-center align-middle'>
+        //             <div className='bg-gray-400 hover:bg-red-500 w-10 h-10 rounded-full flex justify-center'>
+        //                 <i class="fas fa-minus text-xl text-gray-100 mt-2"></i>
+        //             </div>
+        //         </div>
+        //     </div>
+        // </div>
+        // const popularPlaceParent = document.getElementById('popularPlaces');
+        // // popularPlaceParent.appendChild(popularPlaceAddTemplete)
+        // console.log(popularPlaceParent);
+        const keyData = Math.round(Math.random() * 5000);
+        const keyDataUnique = popularPlaceCount.filter(data => keyData === data);
+        if (keyDataUnique.length > 0) {
+        } else {
+            setPopularPlaceCount([...popularPlaceCount, keyData]);
+        }
+    }
 
+    // district data control
+    const districtSelect = e => {
+        setDistrictSelected(e.target.value);
+    }
 
     return (
         <aside style={visableOrNot} className='sideBar w-1/3 fixed border-l-2'>
@@ -75,7 +104,7 @@ const SideBar = ({ visableOrNot, setVisableOrNot }) => {
 
                         <div className='mx-5 mt-5'>
                             <label className='block' htmlFor="dropDown">District</label>
-                            <input list="districtList" className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500' id='dropDown' name='dropDown' type="text" placeholder='Type here' />
+                            <input onChange={districtSelect} list="districtList" className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500' id='dropDown' name='dropDown' type="text" placeholder='Type here' />
                             <span className='-ml-8'><i class="fas fa-chevron-circle-down text-xl text-gray-400"></i></span>
                             <datalist id='districtList'>
                                 {/* <option value="hello 1"></option> */}
@@ -85,41 +114,55 @@ const SideBar = ({ visableOrNot, setVisableOrNot }) => {
                                     )))
                                 }
                             </datalist>
-
                         </div>
 
 
                         <div className='mx-5 mt-5'>
-                            <div>
-                                <label className='block' htmlFor="popularPlace">Popular Place</label>
-                                <input className='w-3/4 rounded-md py-2 px-3 border-2 focus:outline-blue-500' id='popularPlace' name='popularPlace' type="text" placeholder='Type here' defaultValue={'Popular Place 1'} />
-                                <div className='inline-block w-1/4 cursor-pointer select-none'>
-                                    <div className='w-full flex justify-center align-middle'>
-                                        <div className='bg-gray-400 hover:bg-red-500 w-10 h-10 rounded-full flex justify-center'>
+                            <div id="popularPlaces">
+                                <div>
+                                    <label className='block' htmlFor="popularPlace">Popular Place</label>
+                                    <input required onChange={() => {
+
+                                    }} className='w-3/4 rounded-md py-2 px-3 border-2 focus:outline-blue-500' id='popularPlace' name='popularPlace' type="text" placeholder={'Popular place name here'} />
+                                    <div className='inline-block w-1/4 cursor-pointer select-none'>
+                                        <div className='w-full flex justify-center align-middle'>
+                                            {/* <div className='bg-gray-400 hover:bg-red-500 w-10 h-10 rounded-full flex justify-center'>
                                             <i class="fas fa-minus text-xl text-gray-100 mt-2"></i>
+                                        </div> */}
                                         </div>
                                     </div>
                                 </div>
+                                {/* 1 */}
+                                {
+                                    popularPlaceCount.map(number => {
+                                        return (
+                                            <div key={number} className='mt-2'>
+                                                <input required className='w-3/4 rounded-md py-2 px-3 border-2 focus:outline-blue-500 ' id='popularPlace' name='popularPlace' type="text" placeholder={'Popular place name here'} />
+                                                <div className='inline-block w-1/4 cursor-pointer select-none'>
+                                                    <div className='w-full flex justify-center align-middle'>
+                                                        <div onClick={(e) => {
+                                                            const placeParentNode = e.target.parentNode.parentNode.parentNode.parentNode;
+                                                            placeParentNode.remove();
+
+                                                        }} className='bg-gray-400 hover:bg-red-500 w-10 h-10 rounded-full flex justify-center'>
+                                                            <i class="fas fa-minus text-xl text-gray-100 h-full w-full text-center pt-2 rounded-full"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )
+                                    })
+                                }
+                                {/* dynamically add */}
                             </div>
-                            {/* 1 */}
                             <div className='mt-2'>
-                                <input className='w-3/4 rounded-md py-2 px-3 border-2 focus:outline-blue-500 ' id='popularPlace' name='popularPlace' type="text" placeholder='Type here' defaultValue={'Popular Place 2'} />
-                                <div className='inline-block w-1/4 cursor-pointer select-none'>
-                                    <div className='w-full flex justify-center align-middle'>
-                                        <div className='bg-gray-400 hover:bg-red-500 w-10 h-10 rounded-full flex justify-center'>
-                                            <i class="fas fa-minus text-xl text-gray-100 mt-2"></i>
-                                        </div>
-                                    </div>
+                                <div onClick={addPopularPlace} className='w-3/4 rounded-md py-2 px-3  border-2 border-dashed border-gray-500 text-center cursor-pointer select-none'>
+                                    <span className='text-blue-500'>+ add a place</span>
                                 </div>
-                            </div>
-                            {/* 2 */}
-                            <div className='mt-2'>
-                                <div className='w-3/4 rounded-md py-2 px-3  border-2 border-dashed border-gray-500 text-center cursor-pointer select-none'>
-                                    <button onClick={() => { Event.preventDefault() }} className='text-blue-500'>+ add a place</button>
-                                </div>
+                                {/* onClick={() => { Event.preventDefault() }} */}
 
                             </div>
-                            {/* 2 */}
+                            {/* add popular place btn */}
 
                         </div>
                         {/* end add popular place */}
