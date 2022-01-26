@@ -6,6 +6,7 @@ const SideBar = ({ visableOrNot, setVisableOrNot }) => {
     const [divisonData, setDivisonData] = useState([]);
     const [districtData, setDistrictData] = useState([]);
 
+
     const [divisonText, setDivisonText] = useState('');
     const [districtSelected, setDistrictSelected] = useState('');
     const [showSearchBox, setShowSearchBox] = useState({ visibility: 'hidden' });
@@ -25,9 +26,7 @@ const SideBar = ({ visableOrNot, setVisableOrNot }) => {
             .then(data => setDistrictData(data))
     }, [])
 
-    const handleSubmit = () => {
-        // Event.preventDefault();
-    }
+
     const handleBackBtn = () => {
         setVisableOrNot({ right: '-9999px', transition: 'all 0.5s' })
     }
@@ -46,19 +45,7 @@ const SideBar = ({ visableOrNot, setVisableOrNot }) => {
 
     // add popular place
     const addPopularPlace = () => {
-        // const popularPlaceAddTemplete = <div className='mt-2'>
-        //     <input className='w-3/4 rounded-md py-2 px-3 border-2 focus:outline-blue-500 ' id='popularPlace' name='popularPlace' type="text" placeholder='Type here' defaultValue={'Popular Place 2'} />
-        //     <div className='inline-block w-1/4 cursor-pointer select-none'>
-        //         <div className='w-full flex justify-center align-middle'>
-        //             <div className='bg-gray-400 hover:bg-red-500 w-10 h-10 rounded-full flex justify-center'>
-        //                 <i class="fas fa-minus text-xl text-gray-100 mt-2"></i>
-        //             </div>
-        //         </div>
-        //     </div>
-        // </div>
-        // const popularPlaceParent = document.getElementById('popularPlaces');
-        // // popularPlaceParent.appendChild(popularPlaceAddTemplete)
-        // console.log(popularPlaceParent);
+        // generate key
         const keyData = Math.round(Math.random() * 5000);
         const keyDataUnique = popularPlaceCount.filter(data => keyData === data);
         if (keyDataUnique.length > 0) {
@@ -72,6 +59,44 @@ const SideBar = ({ visableOrNot, setVisableOrNot }) => {
         setDistrictSelected(e.target.value);
     }
 
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        let popularPlaces = [];
+        const inputFields = document.getElementsByClassName('popularplacesInputField');
+        for (const iterator of inputFields) {
+            popularPlaces.push(iterator.value);
+        }
+
+        let packagesSelected = [];
+        (document.getElementById('package1').checked) && packagesSelected.push({ id: 1, name: 'Package 1', price: '300', packInfo: [] });
+        (document.getElementById('package2').checked) && packagesSelected.push({ id: 2, name: 'Package 2', price: '300', packInfo: [] });
+        (document.getElementById('package3').checked) && packagesSelected.push({ id: 3, name: 'Package 3', price: '300', packInfo: [] });
+        (document.getElementById('package4').checked) && packagesSelected.push({ id: 4, name: 'Package 4', price: '300', packInfo: [] });
+
+        let placeImage = document.getElementById('placeImage').value;
+
+        const submitInfo = {
+            divison: divisonText,
+            district: districtSelected,
+            popularPlaces: popularPlaces,
+            pakages: packagesSelected,
+            img: placeImage
+        }
+        console.log(submitInfo);
+
+
+        packagesSelected = [];
+        popularPlaces = [];
+        placeImage = '';
+        setDivisonText('')
+        setDistrictSelected("");
+        alert('added')
+        document.addPopularPlaceForm.reset();
+    }
+
+
+
     return (
         <aside style={visableOrNot} className='sideBar w-1/3 fixed border-l-2'>
             <div className='h-16'>
@@ -81,14 +106,14 @@ const SideBar = ({ visableOrNot, setVisableOrNot }) => {
                 <button onClick={handleBackBtn} className='bg-red-600 px-3 py-2 rounded-md text-white ml-10'>&#8592; Back</button>
             </div>
             <div>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} name='addPopularPlaceForm'>
                     <div className='formContentWrapper pb-5'>
 
 
                         <div className='mx-5 mt-5 relative'>
                             <label className='block' htmlFor="searchAbleDropdown">Divison</label>
                             <div >
-                                <input onChange={handleDivison} className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500 focus:outline-b-white' id='searchAbleDropdown' name='searchAbleDropdown' type="text" placeholder='Type here' autoComplete='off' />
+                                <input required onChange={handleDivison} className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500 focus:outline-b-white' id='searchAbleDropdown' name='searchAbleDropdown' type="text" placeholder='Type here' autoComplete='off' />
                                 <span className='-ml-8'><i class="fas fa-search text-xl text-gray-400"></i></span>
                                 <div style={{ ...showSearchBox, maxHeight: '200px', overflowY: 'scroll' }} className='absolute w-full bg-blue-100 shadow-2xl px-2 pb-4 border-b-2 rounded-b-lg'>
                                     {
@@ -104,7 +129,8 @@ const SideBar = ({ visableOrNot, setVisableOrNot }) => {
 
                         <div className='mx-5 mt-5'>
                             <label className='block' htmlFor="dropDown">District</label>
-                            <input onChange={districtSelect} list="districtList" className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500' id='dropDown' name='dropDown' type="text" placeholder='Type here' />
+                            <input required onChange={districtSelect} list="districtList" className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500' id='dropDown' name='dropDown' type="text" placeholder='Type here' />
+
                             <span className='-ml-8'><i class="fas fa-chevron-circle-down text-xl text-gray-400"></i></span>
                             <datalist id='districtList'>
                                 {/* <option value="hello 1"></option> */}
@@ -118,12 +144,18 @@ const SideBar = ({ visableOrNot, setVisableOrNot }) => {
 
 
                         <div className='mx-5 mt-5'>
+                            <label className='block' htmlFor="placeImage">An Ineresting Image</label>
+                            <input required className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500' id='placeImage' name='placeImage' type="url" placeholder='Image Link Here' />
+
+                            <span className='-ml-8'><i class="fas fa-image text-xl text-gray-400"></i></span>
+                        </div>
+
+
+                        <div className='mx-5 mt-5'>
                             <div id="popularPlaces">
                                 <div>
                                     <label className='block' htmlFor="popularPlace">Popular Place</label>
-                                    <input required onChange={() => {
-
-                                    }} className='w-3/4 rounded-md py-2 px-3 border-2 focus:outline-blue-500' id='popularPlace' name='popularPlace' type="text" placeholder={'Popular place name here'} />
+                                    <input required className='popularplacesInputField w-3/4 rounded-md py-2 px-3 border-2 focus:outline-blue-500' id='popularPlace' name='popularPlace' type="text" placeholder={'Popular place name here'} />
                                     <div className='inline-block w-1/4 cursor-pointer select-none'>
                                         <div className='w-full flex justify-center align-middle'>
                                             {/* <div className='bg-gray-400 hover:bg-red-500 w-10 h-10 rounded-full flex justify-center'>
@@ -134,10 +166,10 @@ const SideBar = ({ visableOrNot, setVisableOrNot }) => {
                                 </div>
                                 {/* 1 */}
                                 {
-                                    popularPlaceCount.map(number => {
+                                    popularPlaceCount.map(_key => {
                                         return (
-                                            <div key={number} className='mt-2'>
-                                                <input required className='w-3/4 rounded-md py-2 px-3 border-2 focus:outline-blue-500 ' id='popularPlace' name='popularPlace' type="text" placeholder={'Popular place name here'} />
+                                            <div key={_key} className='mt-2'>
+                                                <input required className='popularplacesInputField w-3/4 rounded-md py-2 px-3 border-2 focus:outline-blue-500 ' id='popularPlace' name='popularPlace' type="text" placeholder={'Popular place name here'} />
                                                 <div className='inline-block w-1/4 cursor-pointer select-none'>
                                                     <div className='w-full flex justify-center align-middle'>
                                                         <div onClick={(e) => {
@@ -236,8 +268,15 @@ const SideBar = ({ visableOrNot, setVisableOrNot }) => {
                     {/* end form content */}
 
                     <div className='flex justify-evenly bg-gray-200 py-2'>
-                        <button>Cancel</button>
-                        <button className='py-2 px-4 bg-blue-400 rounded-md text-white'>Submit</button>
+                        <button onClick={(e) => {
+                            e.preventDefault();
+                            document.addPopularPlaceForm.reset();
+                            setTimeout(() => {
+                                handleBackBtn();
+                            }, 700);
+                        }}>Cancel</button>
+                        {/* <button className='py-2 px-4 bg-blue-400 rounded-md text-white'>Submit</button> */}
+                        <input className='py-2 px-4 bg-blue-400 rounded-md text-white cursor-pointer' type="submit" value="Submit" />
                     </div>
                     {/* end form submit */}
                 </form>
