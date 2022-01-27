@@ -1,8 +1,11 @@
 import React from 'react';
 import './PopularPlaces.css'
 
-const PopularPlaces = ({ placesInfo, setVisableOrNot }) => {
-
+const PopularPlaces = ({ placesInfo, setVisableOrNot, setEditVisableOrNot, setEditKey }) => {
+    const handleEditBtn = (_key) => {
+        setEditVisableOrNot({ right: '0' })
+        setEditKey(_key);
+    }
     return (
         <div className='my-10  p-12 bg-zinc-200/80 rounded-md mx-4'>
             <div className='flex w-full'>
@@ -66,7 +69,7 @@ const PopularPlaces = ({ placesInfo, setVisableOrNot }) => {
                                         }
                                     </div>
                                     <div className=''>
-                                        <button className='w-full font-bold text-gray-900 bg-blue-500/50 my-2 rounded-lg py-2 hover:bg-blue-500/80 transition-colors'>Edit</button>
+                                        <button onClick={() => handleEditBtn(_key)} className='w-full font-bold text-gray-900 bg-blue-500/50 my-2 rounded-lg py-2 hover:bg-blue-500/80 transition-colors'>Edit</button>
                                     </div>
                                 </div>
                             )

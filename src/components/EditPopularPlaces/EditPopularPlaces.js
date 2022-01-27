@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import './SideBar.css'
 
-const SideBar = ({ visableOrNot, setVisableOrNot, getDataFromLocalStorage }) => {
+const EditPopularPlaces = ({ editVisableOrNot, setEditVisableOrNot, getDataFromLocalStorage, setEditKey, editKey }) => {
     const [divisonData, setDivisonData] = useState([]);
     const [districtData, setDistrictData] = useState([]);
     const [divisonSelectedCode, setDivisonSelectedCode] = useState(0)
@@ -12,6 +11,7 @@ const SideBar = ({ visableOrNot, setVisableOrNot, getDataFromLocalStorage }) => 
     const [showSearchBox, setShowSearchBox] = useState({ visibility: 'hidden' });
     const [popularPlaceCount, setPopularPlaceCount] = useState([])
     const [divisonCloseBtnCtrl, setDivisonCloseBtnCtrl] = useState({ display: 'none' });
+    const [editableLocalDataIndex, setEditableLocalDataIndex] = useState(0)
 
     // fetch divison data from api
     useEffect(() => {
@@ -34,7 +34,7 @@ const SideBar = ({ visableOrNot, setVisableOrNot, getDataFromLocalStorage }) => 
 
 
     const handleBackBtn = () => {
-        setVisableOrNot({ right: '-9999px', transition: 'all 0.5s' })
+        setEditVisableOrNot({ right: '-9999px', transition: 'all 0.5s' })
     }
 
     // handle search input field
@@ -49,14 +49,14 @@ const SideBar = ({ visableOrNot, setVisableOrNot, getDataFromLocalStorage }) => 
         }
     }
     const divisonCloseBtn = () => {
-        document.getElementById('searchAbleDropdown').value = '';
+        document.getElementById('editSearchAbleeditDropDown').value = '';
         setDivisonSelectedCode(0);
         setShowSearchBox({ visibility: 'hidden' });
         setDivisonCloseBtnCtrl({ display: 'none' });
     }
 
     const divisonSelect = (e, _code) => {
-        document.getElementById('searchAbleDropdown').value = e;
+        document.getElementById('editSearchAbleeditDropDown').value = e;
         setDivisonText(e);
         setDivisonSelectedCode(_code);
         setShowSearchBox({ visibility: 'hidden' });
@@ -87,7 +87,7 @@ const SideBar = ({ visableOrNot, setVisableOrNot, getDataFromLocalStorage }) => 
     }
 
 
-    const handleSubmit = (e) => {
+    const handleUpdate = (e) => {
         e.preventDefault();
         let popularPlaces = [];
         const inputFields = document.getElementsByClassName('popularplacesInputField');
@@ -96,66 +96,105 @@ const SideBar = ({ visableOrNot, setVisableOrNot, getDataFromLocalStorage }) => 
         }
 
         let packagesSelected = [];
-        (document.getElementById('package1').checked) && packagesSelected.push({ id: 1, name: 'Package 1', price: '300', packInfo: [] });
-        (document.getElementById('package2').checked) && packagesSelected.push({ id: 2, name: 'Package 2', price: '300', packInfo: [] });
-        (document.getElementById('package3').checked) && packagesSelected.push({ id: 3, name: 'Package 3', price: '300', packInfo: [] });
-        (document.getElementById('package4').checked) && packagesSelected.push({ id: 4, name: 'Package 4', price: '300', packInfo: [] });
+        (document.getElementById('editPackage1').checked) && packagesSelected.push({ id: 1, name: 'Package 1', price: '300', packInfo: [] });
+        (document.getElementById('editPackage2').checked) && packagesSelected.push({ id: 2, name: 'Package 2', price: '300', packInfo: [] });
+        (document.getElementById('editPackage3').checked) && packagesSelected.push({ id: 3, name: 'Package 3', price: '300', packInfo: [] });
+        (document.getElementById('editPackage4').checked) && packagesSelected.push({ id: 4, name: 'Package 4', price: '300', packInfo: [] });
 
-        let placeImage = document.getElementById('placeImage').value;
+        let editPlaceImage = document.getElementById('editPlaceImage').value;
 
-        const submitInfo = {
-            divison: divisonText,
-            district: districtSelected,
-            popularPlaces: popularPlaces,
-            pakages: packagesSelected,
-            img: placeImage
-        }
-        console.log(submitInfo);
+        // const submitInfo = {
+        //     divison: divisonText,
+        //     district: districtSelected,
+        //     popularPlaces: popularPlaces,
+        //     pakages: packagesSelected,
+        //     img: editPlaceImage
+        // }
+        // console.log(submitInfo);
         const exists = localStorage.getItem('popular_places_data');
-        if (!exists) {
-            localStorage.setItem("popular_places_data", JSON.stringify([{ ...submitInfo, _key: 1 }]));
-        } else {
-            let oldPlacesData = JSON.parse(exists);
-            const _key = oldPlacesData.length + 1;
-            oldPlacesData.push({ ...submitInfo, _key: _key });
-            localStorage.setItem('popular_places_data', JSON.stringify(oldPlacesData));
-        }
+        // if (!exists) {
+        //     localStorage.setItem("popular_places_data", JSON.stringify([{ ...submitInfo, _key: 1 }]));
+        // } else {
+        //     let oldPlacesData = JSON.parse(exists);
+        //     const _key = oldPlacesData.length + 1;
+        //     oldPlacesData.push({ ...submitInfo, _key: _key });
+        //     localStorage.setItem('popular_places_data', JSON.stringify(oldPlacesData));
+        // }
+        const oldDataForUdate = JSON.parse(exists)
+        // const newData = oldData[editableLocalDataIndex]
+        console.log(oldDataForUdate[editableLocalDataIndex]);
+
+        oldDataForUdate[editableLocalDataIndex].divison = divisonText;
+        oldDataForUdate[editableLocalDataIndex].district = districtSelected;
+        oldDataForUdate[editableLocalDataIndex].popularPlaces = popularPlaces;
+        oldDataForUdate[editableLocalDataIndex].pakages = packagesSelected;
+        oldDataForUdate[editableLocalDataIndex].img = editPlaceImage;
+        localStorage.setItem('popular_places_data', JSON.stringify(oldDataForUdate));
+        console.log(oldDataForUdate);
+
+
 
         // reset all data
         packagesSelected = [];
         popularPlaces = [];
-        placeImage = '';
+        editPlaceImage = '';
         setDivisonText('');
         setDistrictSelected("");
-        document.addPopularPlaceForm.reset();
+        document.editPopularPlaceForm.reset();
         setDivisonSelectedCode(0);
         removeList()
         setTimeout(() => {
             handleBackBtn();
         }, 700);
-        alert('added')
+        alert('updated')
         getDataFromLocalStorage()
     }
 
 
 
+    // Edit function/////////////////////////////////////////////////////////////
+    useEffect(() => {
+        const localData = JSON.parse(localStorage.getItem('popular_places_data'));
+        for (let i = 0; i < localData.length; i++) {
+            if (localData[i]._key === editKey) {
+                setEditableLocalDataIndex(i);
+                break;
+            }
+        }
+        // const { district, divison, img } = localData[localDataEditIndex]
+
+        // change divison field
+        // setDivisonText(divison);
+        // document.getElementById('editSearchAbleeditDropDown').value = divison;
+
+        // change district field
+        // setDistrictSelected(district);
+        // document.getElementById('editSearchAbleeditDropDown').select = divison;
+
+        // change image field
+        // document.getElementById('editPlaceImage').value = img;
+
+    }, [editKey])
+
+
     return (
-        <aside style={visableOrNot} className='sideBar w-1/3 fixed border-l-2'>
+        <aside style={editVisableOrNot} className='sideBar w-1/3 fixed border-l-2'>
             <div className='h-16'>
             </div>
 
-            <div>
+            <div className='flex align-middle'>
                 <button onClick={handleBackBtn} className='bg-red-600 px-3 py-2 rounded-md text-white ml-10'>&#8592; Back</button>
+                <span className='flex-grow text-center text-2xl font-bold text-green-800'>Edit Id: {editKey}</span>
             </div>
             <div>
-                <form onSubmit={handleSubmit} name='addPopularPlaceForm'>
+                <form onSubmit={handleUpdate} name='editPopularPlaceForm'>
                     <div className='formContentWrapper pb-5'>
 
 
                         <div className='mx-5 mt-5 relative'>
-                            <label className='block' htmlFor="searchAbleDropdown">Divison</label>
+                            <label className='block' htmlFor="editSearchAbleeditDropDown">Divison</label>
                             <div >
-                                <input required onChange={handleDivison} className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500 focus:outline-b-white' id='searchAbleDropdown' name='searchAbleDropdown' type="text" placeholder='Type here' autoComplete='off' />
+                                <input required onChange={handleDivison} className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500 focus:outline-b-white' id='editSearchAbleeditDropDown' name='editSearchAbleeditDropDown' type="text" placeholder='Type here' autoComplete='off' />
                                 <span className='-ml-8'><i class="fas fa-search text-xl text-gray-300"></i></span>
                                 <span style={divisonCloseBtnCtrl} className='-ml-12'><i onClick={divisonCloseBtn} class="fas fa-times text-2xl text-gray-400 cursor-pointer hover:text-red-600"></i></span>
                                 <div style={{ ...showSearchBox, maxHeight: '200px', overflowY: 'scroll' }} className='absolute w-full bg-blue-100 shadow-2xl px-2 pb-4 border-b-2 rounded-b-lg'>
@@ -175,8 +214,8 @@ const SideBar = ({ visableOrNot, setVisableOrNot, getDataFromLocalStorage }) => 
 
 
                         <div className='mx-5 mt-5'>
-                            <label className='block' htmlFor="dropDown">District</label>
-                            <select onBlur={districtSelect} required name="dropDown" id="dropDown" className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500'>
+                            <label className='block' htmlFor="editDropDown">District</label>
+                            <select onBlur={districtSelect} required name="editDropDown" id="editDropDown" className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500'>
                                 <option value={'select'}>Select....</option>
                                 {
                                     (districtData.body) ? districtData.body.map(singleDistrictData => [singleDistrictData.display].map(districtName => (
@@ -188,22 +227,12 @@ const SideBar = ({ visableOrNot, setVisableOrNot, getDataFromLocalStorage }) => 
                                         <></>
                                 }
                             </select>
-                            {/* <input required onBlur={districtSelect} list="districtList" className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500' id='dropDown' name='dropDown' type="text" placeholder='Type here' />
-
-                            <span className='-ml-8'><i class="fas fa-chevron-circle-down text-xl text-gray-400"></i></span>
-                            <datalist id='districtList'>
-                            {
-                                (districtData.body) && districtData.body.map(singleDistrictData => [singleDistrictData.display].map(districtName => (
-                                    <option value={districtName}></option>
-                                )))
-                            }
-                        </datalist> */}
                         </div>
 
 
                         <div className='mx-5 mt-5'>
-                            <label className='block' htmlFor="placeImage">An Ineresting Image</label>
-                            <input required className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500' id='placeImage' name='placeImage' type="url" placeholder='Image Link Here' />
+                            <label className='block' htmlFor="editPlaceImage">An Ineresting Image</label>
+                            <input required className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500' id='editPlaceImage' name='editPlaceImage' type="url" placeholder='Image Link Here' />
 
                             <span className='-ml-8'><i class="fas fa-image text-xl text-gray-300"></i></span>
                         </div>
@@ -263,7 +292,7 @@ const SideBar = ({ visableOrNot, setVisableOrNot, getDataFromLocalStorage }) => 
 
                             <div className='mx-5 mt-2'>
                                 <div className='flex justify-items-start'>
-                                    <label className='flex w-full cursor-pointer' htmlFor="package1">
+                                    <label className='flex w-full cursor-pointer' htmlFor="editPackage1">
                                         <div style={{ height: '50px', width: '50px' }} className='bg-blue-200 rounded-md'></div>
                                         <div className='ml-5'>
                                             <p className='text-blue-500 font-bold'>Package 1</p>
@@ -271,13 +300,13 @@ const SideBar = ({ visableOrNot, setVisableOrNot, getDataFromLocalStorage }) => 
                                         </div>
                                     </label>
                                     <div style={{ height: '50px' }} className='flex-grow flex justify-end'>
-                                        <input className='mt-5' type="checkbox" name="package1" id="package1" value='1' />
+                                        <input className='mt-5' type="checkbox" name="editPackage1" id="editPackage1" value='1' />
                                     </div>
                                 </div>
                                 {/*end 01 */}
 
                                 <div className='flex justify-items-start mt-3'>
-                                    <label className='flex w-full cursor-pointer' htmlFor="package2">
+                                    <label className='flex w-full cursor-pointer' htmlFor="editPackage2">
                                         <div style={{ height: '50px', width: '50px' }} className='bg-red-200 rounded-md'></div>
                                         <div className='ml-5'>
                                             <p className='text-red-300 font-bold'>Package 2</p>
@@ -285,13 +314,13 @@ const SideBar = ({ visableOrNot, setVisableOrNot, getDataFromLocalStorage }) => 
                                         </div>
                                     </label>
                                     <div style={{ height: '50px' }} className='flex-grow flex justify-end'>
-                                        <input className='mt-5' type="checkbox" name="package2" id="package2" />
+                                        <input className='mt-5' type="checkbox" name="editPackage2" id="editPackage2" />
                                     </div>
                                 </div>
                                 {/* 02 */}
 
                                 <div className='flex justify-items-start mt-3'>
-                                    <label className='flex w-full cursor-pointer' htmlFor="package3">
+                                    <label className='flex w-full cursor-pointer' htmlFor="editPackage3">
                                         <div style={{ height: '50px', width: '50px' }} className='bg-green-200 rounded-md'></div>
                                         <div className='ml-5'>
                                             <p className='text-green-400 font-bold'>Package 3</p>
@@ -299,13 +328,13 @@ const SideBar = ({ visableOrNot, setVisableOrNot, getDataFromLocalStorage }) => 
                                         </div>
                                     </label>
                                     <div style={{ height: '50px' }} className='flex-grow flex justify-end'>
-                                        <input className='mt-5' type="checkbox" name="package3" id="package3" />
+                                        <input className='mt-5' type="checkbox" name="editPackage3" id="editPackage3" />
                                     </div>
                                 </div>
                                 {/* 03 */}
 
                                 <div className='flex justify-items-start mt-3'>
-                                    <label className='flex w-full cursor-pointer' htmlFor="package4">
+                                    <label className='flex w-full cursor-pointer' htmlFor="editPackage4">
                                         <div style={{ height: '50px', width: '50px' }} className='bg-yellow-400 rounded-md'></div>
                                         <div className='ml-5'>
                                             <p className='text-yellow-600 font-bold'>Package 4</p>
@@ -313,7 +342,7 @@ const SideBar = ({ visableOrNot, setVisableOrNot, getDataFromLocalStorage }) => 
                                         </div>
                                     </label>
                                     <div style={{ height: '50px' }} className='flex-grow flex justify-end'>
-                                        <input className='mt-5' type="checkbox" name="package4" id="package4" />
+                                        <input className='mt-5' type="checkbox" name="editPackage4" id="editPackage4" />
                                     </div>
                                 </div>
                                 {/* 04 */}
@@ -330,13 +359,13 @@ const SideBar = ({ visableOrNot, setVisableOrNot, getDataFromLocalStorage }) => 
                             e.preventDefault();
                             setDivisonSelectedCode(0);
                             removeList();
-                            document.addPopularPlaceForm.reset();
+                            document.editPopularPlaceForm.reset();
                             setTimeout(() => {
                                 handleBackBtn();
                             }, 700);
                         }}>Cancel</button>
                         {/* <button className='py-2 px-4 bg-blue-400 rounded-md text-white'>Submit</button> */}
-                        <input className='py-2 px-4 bg-blue-400 rounded-md text-white cursor-pointer' type="submit" value="Submit" />
+                        <input className='py-2 px-4 bg-blue-400 rounded-md text-white cursor-pointer' type="submit" value="Update" />
                     </div>
                     {/* end form submit */}
                 </form>
@@ -346,4 +375,4 @@ const SideBar = ({ visableOrNot, setVisableOrNot, getDataFromLocalStorage }) => 
     );
 };
 
-export default SideBar;
+export default EditPopularPlaces;

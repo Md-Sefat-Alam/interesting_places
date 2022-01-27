@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
 import './App.css'
 import AddNewPlace from './components/AddNewPlace/AddNewPlace';
+import EditPopularPlaces from './components/EditPopularPlaces/EditPopularPlaces';
 import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
 import PopularPlaces from './components/PopularPlaces/PopularPlaces';
 import SideBar from './components/SideBar/SideBar';
 function App() {
   const [visableOrNot, setVisableOrNot] = useState({ right: '-9999px' });
-
+  const [editVisableOrNot, setEditVisableOrNot] = useState({ right: '-9999px' });
+  const [editKey, setEditKey] = useState(0);
   const [placesInfo, setPlacesInfo] = useState([]);
 
   // get data from local storage
@@ -49,10 +51,12 @@ function App() {
         {/* add a new place */}
 
         <section className='container popularPlaces'>
-          <PopularPlaces setVisableOrNot={setVisableOrNot} placesInfo={placesInfo} />
+          <PopularPlaces setEditKey={setEditKey} setEditVisableOrNot={setEditVisableOrNot} setVisableOrNot={setVisableOrNot} placesInfo={placesInfo} />
         </section>
 
         <SideBar getDataFromLocalStorage={getDataFromLocalStorage} visableOrNot={visableOrNot} setVisableOrNot={setVisableOrNot} />
+
+        <EditPopularPlaces editKey={editKey} setEditKey={setEditKey} getDataFromLocalStorage={getDataFromLocalStorage} editVisableOrNot={editVisableOrNot} setEditVisableOrNot={setEditVisableOrNot} />
 
       </main>
       {/* End Main Part of web page */}
