@@ -3,7 +3,7 @@ import "./AddNewPlace.css"
 
 const AddNewPlace = ({ setVisableOrNot }) => {
     const handleAddButton = () => {
-        setVisableOrNot({ right: "0", transition: 'all 0.3s' })
+        setVisableOrNot({ right: "0", transition: 'all 0.3s' });
     }
     return (
         <div className='flex justify-between border-none p-12 bg-zinc-200/80 rounded-md mx-4'>

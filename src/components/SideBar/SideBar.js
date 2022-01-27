@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import './SideBar.css'
 
-const SideBar = ({ visableOrNot, setVisableOrNot }) => {
+const SideBar = ({ visableOrNot, setVisableOrNot, getDataFromLocalStorage }) => {
     let i = 102012;
     const [divisonData, setDivisonData] = useState([]);
     const [districtData, setDistrictData] = useState([]);
+    const [divisonSelectedCode, setDivisonSelectedCode] = useState(0)
 
 
     const [divisonText, setDivisonText] = useState('');
     const [districtSelected, setDistrictSelected] = useState('');
     const [showSearchBox, setShowSearchBox] = useState({ visibility: 'hidden' });
     const [popularPlaceCount, setPopularPlaceCount] = useState([])
+    const [divisonCloseBtnCtrl, setDivisonCloseBtnCtrl] = useState({ display: 'none' });
 
     // fetch divison data from api
     useEffect(() => {
@@ -21,10 +23,15 @@ const SideBar = ({ visableOrNot, setVisableOrNot }) => {
 
     // fetch district data from api
     useEffect(() => {
-        fetch('https://engine.shikho.net/address?district_id=613581915')
-            .then(res => res.json())
-            .then(data => setDistrictData(data))
-    }, [])
+        if (divisonSelectedCode !== 0) {
+            const url = `https://engine.shikho.net/address?district_id=${divisonSelectedCode}`
+            fetch(url)
+                .then(res => res.json())
+                .then(data => setDistrictData(data))
+        } else {
+            setDistrictData([])
+        }
+    }, [divisonSelectedCode])
 
 
     const handleBackBtn = () => {
@@ -34,13 +41,34 @@ const SideBar = ({ visableOrNot, setVisableOrNot }) => {
     // handle search input field
     const handleDivison = (e) => {
         setDivisonText(e.target.value);
-        setShowSearchBox({ visibility: 'visible' })
+        setShowSearchBox({ visibility: 'visible' });
+        if (e.target.value) {
+            setDivisonCloseBtnCtrl({ display: 'inline' });
+        } else {
+            setDivisonCloseBtnCtrl({ display: 'none' });
+            setShowSearchBox({ visibility: 'hidden' });
+        }
+    }
+    const divisonCloseBtn = () => {
+        document.getElementById('searchAbleDropdown').value = '';
+        setDivisonSelectedCode(0);
+        setShowSearchBox({ visibility: 'hidden' });
+        setDivisonCloseBtnCtrl({ display: 'none' });
     }
 
-    const divisonSelect = e => {
+    const divisonSelect = (e, _code) => {
         document.getElementById('searchAbleDropdown').value = e;
         setDivisonText(e);
+        setDivisonSelectedCode(_code);
         setShowSearchBox({ visibility: 'hidden' });
+    }
+    // find all option for remove from old district list
+    const removeList = () => {
+        const optionElements = document.getElementsByClassName('districtOptionListData');
+        [optionElements].map(e => {
+            e.innerHTML = <></>
+        })
+        console.log(optionElements);
     }
 
     // add popular place
@@ -86,10 +114,11 @@ const SideBar = ({ visableOrNot, setVisableOrNot }) => {
         console.log(submitInfo);
         const exists = localStorage.getItem('popular_places_data');
         if (!exists) {
-            localStorage.setItem("popular_places_data", JSON.stringify([submitInfo]));
+            localStorage.setItem("popular_places_data", JSON.stringify([{ ...submitInfo, _key: 1 }]));
         } else {
             let oldPlacesData = JSON.parse(exists);
-            oldPlacesData.push(submitInfo);
+            const _key = oldPlacesData.length + 1;
+            oldPlacesData.push({ ...submitInfo, _key: _key });
             localStorage.setItem('popular_places_data', JSON.stringify(oldPlacesData));
         }
 
@@ -97,13 +126,16 @@ const SideBar = ({ visableOrNot, setVisableOrNot }) => {
         packagesSelected = [];
         popularPlaces = [];
         placeImage = '';
-        setDivisonText('')
+        setDivisonText('');
         setDistrictSelected("");
         document.addPopularPlaceForm.reset();
+        setDivisonSelectedCode(0);
+        removeList()
         setTimeout(() => {
             handleBackBtn();
         }, 700);
         alert('added')
+        getDataFromLocalStorage()
     }
 
 
@@ -125,11 +157,16 @@ const SideBar = ({ visableOrNot, setVisableOrNot }) => {
                             <label className='block' htmlFor="searchAbleDropdown">Divison</label>
                             <div >
                                 <input required onChange={handleDivison} className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500 focus:outline-b-white' id='searchAbleDropdown' name='searchAbleDropdown' type="text" placeholder='Type here' autoComplete='off' />
-                                <span className='-ml-8'><i class="fas fa-search text-xl text-gray-400"></i></span>
+                                <span className='-ml-8'><i class="fas fa-search text-xl text-gray-300"></i></span>
+                                <span style={divisonCloseBtnCtrl} className='-ml-12'><i onClick={divisonCloseBtn} class="fas fa-times text-2xl text-gray-400 cursor-pointer hover:text-red-600"></i></span>
                                 <div style={{ ...showSearchBox, maxHeight: '200px', overflowY: 'scroll' }} className='absolute w-full bg-blue-100 shadow-2xl px-2 pb-4 border-b-2 rounded-b-lg'>
                                     {
                                         (divisonData.body) && divisonData.body.map(singleDivisonData => [singleDivisonData.display].filter(divisonName => divisonName.toLowerCase().includes(divisonText.toLowerCase())).map(sortedDivisonName => (
-                                            <option key={i++} onClick={(e) => divisonSelect(e.target.innerText)} className='hover:bg-gray-100 cursor-pointer p-1' value={sortedDivisonName}>{sortedDivisonName}</option>
+                                            <option key={singleDivisonData.code} onClick={(e) => {
+                                                e.stopPropagation();
+                                                removeList();
+                                                divisonSelect(e.target.innerText, singleDivisonData.code)
+                                            }} className='hover:bg-gray-100 cursor-pointer p-1' value={sortedDivisonName}>{sortedDivisonName}</option>
                                         )))
                                     }
                                 </div>
@@ -140,17 +177,28 @@ const SideBar = ({ visableOrNot, setVisableOrNot }) => {
 
                         <div className='mx-5 mt-5'>
                             <label className='block' htmlFor="dropDown">District</label>
-                            <input required onBlur={districtSelect} list="districtList" className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500' id='dropDown' name='dropDown' type="text" placeholder='Type here' />
+                            <select onBlur={districtSelect} required name="dropDown" id="dropDown" className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500'>
+                                <option value={'select'}>Select....</option>
+                                {
+                                    (districtData.body) ? districtData.body.map(singleDistrictData => [singleDistrictData.display].map(districtName => (
+                                        <>
+                                            <option className='districtOptionListData' value={districtName}>{districtName}</option>
+                                        </>
+                                    )))
+                                        :
+                                        <></>
+                                }
+                            </select>
+                            {/* <input required onBlur={districtSelect} list="districtList" className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500' id='dropDown' name='dropDown' type="text" placeholder='Type here' />
 
                             <span className='-ml-8'><i class="fas fa-chevron-circle-down text-xl text-gray-400"></i></span>
                             <datalist id='districtList'>
-                                {/* <option value="hello 1"></option> */}
-                                {
-                                    (districtData.body) && districtData.body.map(singleDistrictData => [singleDistrictData.display].map(districtName => (
-                                        <option value={districtName}></option>
-                                    )))
-                                }
-                            </datalist>
+                            {
+                                (districtData.body) && districtData.body.map(singleDistrictData => [singleDistrictData.display].map(districtName => (
+                                    <option value={districtName}></option>
+                                )))
+                            }
+                        </datalist> */}
                         </div>
 
 
@@ -158,7 +206,7 @@ const SideBar = ({ visableOrNot, setVisableOrNot }) => {
                             <label className='block' htmlFor="placeImage">An Ineresting Image</label>
                             <input required className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500' id='placeImage' name='placeImage' type="url" placeholder='Image Link Here' />
 
-                            <span className='-ml-8'><i class="fas fa-image text-xl text-gray-400"></i></span>
+                            <span className='-ml-8'><i class="fas fa-image text-xl text-gray-300"></i></span>
                         </div>
 
 
@@ -281,6 +329,8 @@ const SideBar = ({ visableOrNot, setVisableOrNot }) => {
                     <div className='flex justify-evenly bg-gray-200 py-2'>
                         <button onClick={(e) => {
                             e.preventDefault();
+                            setDivisonSelectedCode(0);
+                            removeList();
                             document.addPopularPlaceForm.reset();
                             setTimeout(() => {
                                 handleBackBtn();

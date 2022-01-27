@@ -7,7 +7,7 @@ const Footer = () => {
             <div className='container'>
                 <div className='flex align-middle'>
                     <div className='leftSideLogo w-1/2 mt-40 text-center'>
-                        <h3 className="text-5xl cursor-pointer select-none font-bold text-yellow-600 mx-4">Popular <span className="font-bold text-gray-900">Places</span></h3>
+                        <h3 className="text-5xl cursor-pointer select-none font-bold text-yellow-300 mx-4">Popular <span className="font-bold text-white">Places</span></h3>
                     </div>
                     <div className='w-1/2 flex justify-center mt-32 footerList text-white'>
                         <ul className='text-left'>
@@ -19,7 +19,7 @@ const Footer = () => {
                     </div>
                 </div>
                 <div className='mt-16 text-center'>
-                    <h4> &copy; All Right Reserved By <h3 className="text-xl inline cursor-pointer select-none font-bold text-yellow-600 mx-4">Popular <span className="font-bold text-gray-900">Places</span></h3></h4>
+                    <h4> &copy; All Right Reserved By <h3 className="text-xl inline cursor-pointer select-none font-bold text-yellow-300 mx-4">Popular <span className="font-bold text-white">Places</span></h3></h4>
                 </div>
             </div>
         </footer>

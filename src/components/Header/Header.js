@@ -5,7 +5,7 @@ const Header = () => {
         <header className="py-2 fixed w-full">
             <div className='container flex justify-between'>
                 <div className="font-bold text-3xl cursor-pointer select-none w-1/2">
-                    <h3 className="text-yellow-600 mx-4">Popular <span className="font-bold text-gray-900">Places</span></h3>
+                    <h3 className="text-yellow-300 mx-4">Popular <span className="font-bold text-white">Places</span></h3>
                 </div>
                 <nav className='w-1/2'>
                     <ul className='flex text-white'>
