@@ -84,15 +84,26 @@ const SideBar = ({ visableOrNot, setVisableOrNot }) => {
             img: placeImage
         }
         console.log(submitInfo);
+        const exists = localStorage.getItem('popular_places_data');
+        if (!exists) {
+            localStorage.setItem("popular_places_data", JSON.stringify([submitInfo]));
+        } else {
+            let oldPlacesData = JSON.parse(exists);
+            oldPlacesData.push(submitInfo);
+            localStorage.setItem('popular_places_data', JSON.stringify(oldPlacesData));
+        }
 
-
+        // reset all data
         packagesSelected = [];
         popularPlaces = [];
         placeImage = '';
         setDivisonText('')
         setDistrictSelected("");
-        alert('added')
         document.addPopularPlaceForm.reset();
+        setTimeout(() => {
+            handleBackBtn();
+        }, 700);
+        alert('added')
     }
 
 
@@ -129,7 +140,7 @@ const SideBar = ({ visableOrNot, setVisableOrNot }) => {
 
                         <div className='mx-5 mt-5'>
                             <label className='block' htmlFor="dropDown">District</label>
-                            <input required onChange={districtSelect} list="districtList" className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500' id='dropDown' name='dropDown' type="text" placeholder='Type here' />
+                            <input required onBlur={districtSelect} list="districtList" className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500' id='dropDown' name='dropDown' type="text" placeholder='Type here' />
 
                             <span className='-ml-8'><i class="fas fa-chevron-circle-down text-xl text-gray-400"></i></span>
                             <datalist id='districtList'>
