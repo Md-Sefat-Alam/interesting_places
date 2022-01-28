@@ -7,14 +7,14 @@ const PopularPlaces = ({ placesInfo, setVisableOrNot, setEditVisableOrNot, setEd
         setEditKey(_key);
     }
     return (
-        <div className='my-10  p-12 bg-zinc-200/80 rounded-md mx-4'>
+        <div className='my-10  xl:p-12 md:p-5 sm:p-3 bg-zinc-200/80 rounded-md mx-4'>
             <div className='flex w-full'>
                 <h4 className='text-2xl font-bold'>Popular Places</h4>
                 <div style={{ height: "15px" }} className='bg-gray-300 rounded mt-3 ml-3 flex-grow'></div>
             </div>
 
             <div className='bg-white mt-10 rounded-lg'>
-                <div className='grid grid-cols-3 gap-5 p-5 '>
+                <div className='grid xl:grid-cols-3 lg:grid-cols-2 sm:grid-cols-2 gap-5 p-5 '>
 
                     {/* <div className='flex flex-col border rounded-lg py-4 px-2'>
                         <div style={{ height: '150px' }} className='bg-gray-200 rounded'>
@@ -31,14 +31,11 @@ const PopularPlaces = ({ placesInfo, setVisableOrNot, setEditVisableOrNot, setEd
 
                     {/* dynamically add card */}
                     {
-                        // (placesInfo.length>0)?
-                    }
-                    {
                         (placesInfo !== null) ? placesInfo.map(singlePlace => {
                             const { district, divison, img, pakages, popularPlaces, _key } = singlePlace;
                             return (
                                 <div key={_key} className='flex flex-col border rounded-lg py-4 px-2'>
-                                    <div style={{ height: '150px' }} className='bg-gray-200 rounded overflow-hidden w-full'>
+                                    <div style={{ height: '180px' }} className='bg-gray-200 rounded overflow-hidden w-full'>
                                         <img class="" src={img} alt="" />
                                     </div>
                                     <div style={{ minHeight: '180px' }}>

@@ -140,7 +140,7 @@ const SideBar = ({ visableOrNot, setVisableOrNot, getDataFromLocalStorage }) => 
 
 
     return (
-        <aside style={visableOrNot} className='sideBar w-1/3 fixed border-l-2'>
+        <aside style={visableOrNot} className='sideBar shadow-2xl w-full sm:w-full md:w-1/2 xl:w-1/3 fixed border-l-2 '>
             <div className='h-16'>
             </div>
 

@@ -172,13 +172,13 @@ const EditPopularPlaces = ({ editVisableOrNot, setEditVisableOrNot, getDataFromL
         // document.getElementById('editSearchAbleeditDropDown').select = divison;
 
         // change image field
-        // document.getElementById('editPlaceImage').value = img;
+        document.getElementById('editPlaceImage').value = localData[editableLocalDataIndex].img;
 
     }, [editKey])
 
 
     return (
-        <aside style={editVisableOrNot} className='sideBar w-1/3 fixed border-l-2'>
+        <aside style={editVisableOrNot} className='sideBar shadow-2xl w-full sm:w-full md:w-1/2 xl:w-1/3 fixed border-l-2'>
             <div className='h-16'>
             </div>
 
