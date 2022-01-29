@@ -36,7 +36,7 @@ const PopularPlaces = ({ placesInfo, setVisableOrNot, setEditVisableOrNot, setEd
                             return (
                                 <div key={_key} className='flex flex-col border rounded-lg py-4 px-2'>
                                     <div style={{ height: '180px' }} className='bg-gray-200 rounded overflow-hidden w-full'>
-                                        <img class="" src={img} alt="" />
+                                        <img className="" src={img} alt="" />
                                     </div>
                                     <div style={{ minHeight: '180px' }}>
                                         <div className='my-2 ml-2'>

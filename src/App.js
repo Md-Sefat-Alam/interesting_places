@@ -30,7 +30,6 @@ function App() {
       setPlacesInfo(JSON.parse(exists));
     }
   }, []);
-  console.log(placesInfo);
 
 
   return (

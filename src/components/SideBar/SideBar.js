@@ -67,7 +67,7 @@ const SideBar = ({ visableOrNot, setVisableOrNot, getDataFromLocalStorage }) => 
         [optionElements].map(e => {
             e.innerHTML = <></>
         })
-        console.log(optionElements);
+        // console.log(optionElements);
     }
 
     // add popular place
@@ -110,7 +110,7 @@ const SideBar = ({ visableOrNot, setVisableOrNot, getDataFromLocalStorage }) => 
             pakages: packagesSelected,
             img: placeImage
         }
-        console.log(submitInfo);
+        // console.log(submitInfo);
         const exists = localStorage.getItem('popular_places_data');
         if (!exists) {
             localStorage.setItem("popular_places_data", JSON.stringify([{ ...submitInfo, _key: 1 }]));
@@ -156,8 +156,8 @@ const SideBar = ({ visableOrNot, setVisableOrNot, getDataFromLocalStorage }) => 
                             <label className='block' htmlFor="searchAbleDropdown">Divison</label>
                             <div >
                                 <input required onChange={handleDivison} className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500 focus:outline-b-white' id='searchAbleDropdown' name='searchAbleDropdown' type="text" placeholder='Type here' autoComplete='off' />
-                                <span className='-ml-8'><i class="fas fa-search text-xl text-gray-300"></i></span>
-                                <span style={divisonCloseBtnCtrl} className='-ml-12'><i onClick={divisonCloseBtn} class="fas fa-times text-2xl text-gray-400 cursor-pointer hover:text-red-600"></i></span>
+                                <span className='-ml-8'><i className="fas fa-search text-xl text-gray-300"></i></span>
+                                <span style={divisonCloseBtnCtrl} className='-ml-12'><i onClick={divisonCloseBtn} className="fas fa-times text-2xl text-gray-400 cursor-pointer hover:text-red-600"></i></span>
                                 <div style={{ ...showSearchBox, maxHeight: '200px', overflowY: 'scroll' }} className='absolute w-full bg-blue-100 shadow-2xl px-2 pb-4 border-b-2 rounded-b-lg'>
                                     {
                                         (divisonData.body) && divisonData.body.map(singleDivisonData => [singleDivisonData.display].filter(divisonName => divisonName.toLowerCase().includes(divisonText.toLowerCase())).map(sortedDivisonName => (
@@ -190,7 +190,7 @@ const SideBar = ({ visableOrNot, setVisableOrNot, getDataFromLocalStorage }) => 
                             </select>
                             {/* <input required onBlur={districtSelect} list="districtList" className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500' id='dropDown' name='dropDown' type="text" placeholder='Type here' />
 
-                            <span className='-ml-8'><i class="fas fa-chevron-circle-down text-xl text-gray-400"></i></span>
+                            <span className='-ml-8'><i className="fas fa-chevron-circle-down text-xl text-gray-400"></i></span>
                             <datalist id='districtList'>
                             {
                                 (districtData.body) && districtData.body.map(singleDistrictData => [singleDistrictData.display].map(districtName => (
@@ -205,7 +205,7 @@ const SideBar = ({ visableOrNot, setVisableOrNot, getDataFromLocalStorage }) => 
                             <label className='block' htmlFor="placeImage">An Ineresting Image</label>
                             <input required className='w-full border-2 rounded-md py-2 px-3 bg-blue-200/50 focus:outline-blue-500' id='placeImage' name='placeImage' type="url" placeholder='Image Link Here' />
 
-                            <span className='-ml-8'><i class="fas fa-image text-xl text-gray-300"></i></span>
+                            <span className='-ml-8'><i className="fas fa-image text-xl text-gray-300"></i></span>
                         </div>
 
 
@@ -217,7 +217,7 @@ const SideBar = ({ visableOrNot, setVisableOrNot, getDataFromLocalStorage }) => 
                                     <div className='inline-block w-1/4 cursor-pointer select-none'>
                                         <div className='w-full flex justify-center align-middle'>
                                             {/* <div className='bg-gray-400 hover:bg-red-500 w-10 h-10 rounded-full flex justify-center'>
-                                            <i class="fas fa-minus text-xl text-gray-100 mt-2"></i>
+                                            <i className="fas fa-minus text-xl text-gray-100 mt-2"></i>
                                         </div> */}
                                         </div>
                                     </div>
@@ -235,7 +235,7 @@ const SideBar = ({ visableOrNot, setVisableOrNot, getDataFromLocalStorage }) => 
                                                             placeParentNode.remove();
 
                                                         }} className='bg-gray-400 hover:bg-red-500 w-10 h-10 rounded-full flex justify-center'>
-                                                            <i class="fas fa-minus text-xl text-gray-100 h-full w-full text-center pt-2 rounded-full"></i>
+                                                            <i className="fas fa-minus text-xl text-gray-100 h-full w-full text-center pt-2 rounded-full"></i>
                                                         </div>
                                                     </div>
                                                 </div>

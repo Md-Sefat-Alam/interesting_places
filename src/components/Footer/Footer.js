@@ -19,7 +19,7 @@ const Footer = () => {
                     </div>
                 </div>
                 <div className='mt-16 text-center'>
-                    <h4> &copy; All Right Reserved By <h3 className="text-sm md:xl inline cursor-pointer select-none font-bold text-yellow-300 mx-4">Popular <span className="font-bold text-white">Places</span></h3></h4>
+                    <h4> &copy; All Right Reserved By <span className="text-sm md:xl inline cursor-pointer select-none font-bold text-yellow-300 mx-4">Popular <span className="font-bold text-white">Places</span></span></h4>
                 </div>
             </div>
         </footer>
